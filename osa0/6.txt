@@ -1,0 +1,16 @@
+kayttaja->selain:
+note left of selain
+käyttäjä painaa "talenna"-nappia
+end note
+
+note left of selain
+selain lisää muistiinpanon listaan
+end note
+
+selain->palvelin: POST fullstack-exampleapp.herokuapp.com/new_note_spa
+palvelin->selain: status 201, message: note created
+
+note left of selain
+selain tulostaa konsoliin
+"message: note created"
+end note

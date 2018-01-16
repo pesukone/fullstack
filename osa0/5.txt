@@ -1,0 +1,32 @@
+kayttaja->selain:
+note left of selain
+käyttäjä navigoi spa-sivulle
+end note
+
+selain->palvelin: GET fullstack-exampleapp.herokuapp.com/spa
+palvelin->selain: status 200, sivun HTML-koodi
+note left of selain
+selain näyttää haetun HTML-sivun
+ja hakee palvelimelta CSS-tyylitiedoston ja
+javascript-koodin
+end note
+
+selain->palvelin: GET fullstack-exampleapp.herokuapp.com/main.css
+selain->palvelin: GET fullstack-exampleapp.herokuapp.com/spa.js
+
+palvelin->selain: status 200, sivun CSS-tyylit
+note left of selain
+selain ottaa käyttöön palvelimelta haetun tyylitiedoston
+end note
+
+palvelin->selain: status 200, javascript-koodia
+note left of selain
+selain suorittaa palvelimelta haetun javascript-koodin,
+mikä johtaa json-datan hakemiseen palvelimelta
+end note
+selain->palvelin: GET fullstack-exampleapp.herokuapp.com/data.json
+palvelin->selain: status 200, json-dataa
+
+note left of selain
+selain näyttää palvelimelta haetun json-datan
+end note
