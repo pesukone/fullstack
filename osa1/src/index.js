@@ -32,15 +32,16 @@ const Otsikko = ({ kurssi }) => <h1>{kurssi}</h1>
 const Sisalto = ({ o1, t1, o2, t2, o3, t3 }) => {
   return (
     <div>
-      <p>{o1} {t1}</p>
-      <p>{o2} {t2}</p>
-      <p>{o3} {t3}</p>
+      <Osa nimi={o1} tehtavia={t1} />
+      <Osa nimi={o2} tehtavia={t2} />
+      <Osa nimi={o3} tehtavia={t3} />
     </div>
   )
 }
 
-const Yhteensa = ({t1, t2, t3 }) =>
-  <p>yhteensä {t1 + t2 + t3} tehtävää</p>
+const Yhteensa = ({t1, t2, t3 }) => <p>yhteensä {t1 + t2 + t3} tehtävää</p>
+
+const Osa = ({ nimi, tehtavia }) => <p>{nimi} {tehtavia}</p>
 
 ReactDOM.render(
   <App />,
