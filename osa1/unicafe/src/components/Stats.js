@@ -29,11 +29,15 @@ const Stats = ({ tila }) => {
   return (
     <div>
       <h1>statistiikka</h1>
-      <Stat nimi="hyvä" arvo={hyva} />
-      <Stat nimi="neutraali" arvo={neutraali} />
-      <Stat nimi="huono" arvo={huono} />
-      <Stat nimi="keskiarvo" arvo={keskiarvo(tila)} />
-      <Stat nimi="positiivisia" arvo={positiivisia(tila) + " %"} />
+      <table>
+        <tbody>
+          <Stat nimi="hyvä" arvo={hyva} />
+          <Stat nimi="neutraali" arvo={neutraali} />
+          <Stat nimi="huono" arvo={huono} />
+          <Stat nimi="keskiarvo" arvo={keskiarvo(tila)} />
+          <Stat nimi="positiivisia" arvo={positiivisia(tila) + " %"} />
+        </tbody>
+      </table>
     </div>
   )
 }
