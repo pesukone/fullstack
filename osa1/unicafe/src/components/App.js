@@ -13,17 +13,15 @@ class App extends React.Component {
     }
   }
 
-  lisaaHyva = () => this.setState({ hyva: this.state.hyva + 1 })
-  lisaaNeutraali = () => this.setState({ neutraali: this.state.neutraali + 1 })
-  lisaaHuono = () => this.setState({ huono: this.state.huono + 1 })
+  lisaa = (avain) => () => this.setState({ [avain]: this.state[avain] + 1 })
 
   render() {
     return (
       <div>
         <h1>anna palautetta</h1>
-        <Button nimi="hyvä" lisays={this.lisaaHyva} />
-        <Button nimi="neutraali" lisays={this.lisaaNeutraali} />
-        <Button nimi="huono" lisays={this.lisaaHuono} />
+        <Button nimi="hyvä" lisays={this.lisaa("hyva")} />
+        <Button nimi="neutraali" lisays={this.lisaa("neutraali")} />
+        <Button nimi="huono" lisays={this.lisaa("huono")} />
         <Stats tila={this.state} />
       </div>
     )
