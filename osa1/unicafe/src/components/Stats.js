@@ -20,14 +20,12 @@ const positiivisia = ({ hyva, neutraali, huono }) => {
 
 const Stats = ({ tila }) => {
   const { hyva, neutraali, huono } = tila
-    /*return (
-      <h1>statistiikka</h1>
-      <p>hyvä: {hyva}</p>
-      <p>neutraali: {neutraali}</p>
-      <p>huono: {huono}</p>
-      <p>keskiarvo: {keskiarvo(tila)}</p>
-      <p>positiivisia: {positiivisia(tila)} %</p>
-  )*/
+  if (hyva === 0 && neutraali === 0 && huono === 0) {
+    return (
+      <p>yhtään palautetta ei ole annettu</p>
+    )
+  }
+
   return (
     <div>
       <h1>statistiikka</h1>
