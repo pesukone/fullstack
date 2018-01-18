@@ -1,13 +1,19 @@
 import React from 'react';
 
+import Numbers from './Numbers'
+
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       persons: [
-        { name: 'Arto Hellas' }
+        {
+          name: 'Arto Hellas',
+          number: '00000123'
+        }
       ],
-      newName: ''
+      newName: '',
+      newNumber: ''
     }
   }
 
@@ -19,14 +25,18 @@ class App extends React.Component {
     }
 
     const new_persons = this.state.persons
-    new_persons.push({ name: this.state.newName })
+    new_persons.push({ name: this.state.newName, number: this.state.newNumber })
     this.setState({ persons: new_persons })
   }
 
   nameInList = (name) => this.state.persons.map(person => person.name === name).includes(true)
 
-  handleFieldChange = (event) => {
+  handleNameChange = (event) => {
     this.setState({ newName: event.target.value })
+  }
+
+  handleNumberChange = (event) => {
+    this.setState({ newNumber: event.target.value })
   }
 
   render() {
@@ -36,22 +46,26 @@ class App extends React.Component {
         <form onSubmit={this.addPerson}>
           <div>
             nimi:
-          <input
-            value={this.state.newName}
-            onChange={this.handleFieldChange}
-          />
+            <input 
+              value={this.state.newName}
+              onChange={this.handleNameChange}
+            />
+          </div>
+          <div>
+            numero:
+            <input
+              value={this.state.newNumber}
+              onChange={this.handleNumberChange}
+            />
           </div>
           <div>
             <button type="submit">lisää</button>
           </div>
         </form>
-        <h2>Numerot</h2>
-        {this.state.persons.map(person => <Name person={person} key={person.name} />)}
+        <Numbers persons={this.state.persons} />
       </div>
     )
   }
 }
-
-const Name = ({ person }) => <div>{person.name}</div>
 
 export default App
