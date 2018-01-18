@@ -17,10 +17,12 @@ class App extends Component {
   next_anecdote = () => this.setState({ selected: this.state.anecdotes[Math.floor(Math.random() * this.state.anecdotes.length)] })
 
   vote_anecdote = (anecdote) => () => {
-    const new_anecs = this.state.anecdotes
+    const new_anecs = this.state.anecdotes.slice()
     new_anecs[new_anecs.indexOf(anecdote)].votes++
     this.setState({ anecdotes: new_anecs })
   }
+
+  most_votes = () => this.state.anecdotes.slice().sort((a, b) => b.votes - a.votes)[0]
 
   render() {
     return (
@@ -28,6 +30,10 @@ class App extends Component {
         <Anecdote anecdote={this.state.selected} />
         <Next func={this.next_anecdote} />
         <Vote vote_func={this.vote_anecdote(this.state.selected)} />
+        <br />
+        <br />
+        <b>anecdote with most votes:</b>
+        <Anecdote anecdote={this.most_votes()} />
       </div>
     )
   }

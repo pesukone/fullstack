@@ -3,8 +3,9 @@ import React from 'react'
 const Anecdote = ({ anecdote }) => {
   return (
     <div>
-      <p>{anecdote.text}</p>
-      <p>has {anecdote.votes} votes</p>
+      {anecdote.text}
+      <br />
+      has {anecdote.votes} votes
     </div>
   )
 }
