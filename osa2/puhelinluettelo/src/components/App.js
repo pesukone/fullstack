@@ -7,13 +7,14 @@ class App extends React.Component {
     super(props)
     this.state = {
       persons: [
-        {
-          name: 'Arto Hellas',
-          number: '00000123'
-        }
+        { name: 'Arto Hellas', number: '040-123456' },
+        { name: 'Martti Tienari', number: '040-123456' },
+        { name: 'Arto Järvinen', number: '040-123456' },
+        { name: 'Lea Kutvonen', number: '040-123456' }
       ],
       newName: '',
-      newNumber: ''
+      newNumber: '',
+      filter: ''
     }
   }
 
@@ -31,38 +32,40 @@ class App extends React.Component {
 
   nameInList = (name) => this.state.persons.map(person => person.name === name).includes(true)
 
-  handleNameChange = (event) => {
-    this.setState({ newName: event.target.value })
-  }
-
-  handleNumberChange = (event) => {
-    this.setState({ newNumber: event.target.value })
+  handleChange = (field) => (event) => {
+    this.setState({ [field]: event.target.value })
   }
 
   render() {
     return (
       <div>
         <h2>Puhelinluettelo</h2>
+        rajaa näytettäviä
+        <input
+          value={this.state.filter}
+          onChange={this.handleChange("filter")}
+        />
+        <h2>Lisää uusi</h2>
         <form onSubmit={this.addPerson}>
           <div>
             nimi:
             <input 
               value={this.state.newName}
-              onChange={this.handleNameChange}
+              onChange={this.handleChange("newName")}
             />
           </div>
           <div>
             numero:
             <input
               value={this.state.newNumber}
-              onChange={this.handleNumberChange}
+              onChange={this.handleChange("newNumber")}
             />
           </div>
           <div>
             <button type="submit">lisää</button>
           </div>
         </form>
-        <Numbers persons={this.state.persons} />
+        <Numbers persons={this.state.persons} filter={this.state.filter} />
       </div>
     )
   }
