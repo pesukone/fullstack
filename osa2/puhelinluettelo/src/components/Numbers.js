@@ -13,7 +13,7 @@ const Numbers = ({ persons, filter }) => {
   )
 }
 
-const Phone = ({ person }) => <tr><td>{person.name}</td> <td>{person.number}</td></tr>
+const Phone = ({ person }) => <tr><td>{person.name}</td><td>{person.number}</td></tr>
 
 const filterPersons = (persons, filter) => 
   persons.filter(person =>
