@@ -1,9 +1,9 @@
 import React from 'react';
-import axios from 'axios'
 
-import Numbers from './Numbers'
-import Input from './Input'
-import Filter from './Filter'
+import Numbers from './components/Numbers'
+import Input from './components/Input'
+import Filter from './components/Filter'
+import numberService from './services/numbers'
 
 class App extends React.Component {
   constructor(props) {
@@ -17,7 +17,7 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    axios.get('http://127.0.0.1:3001/persons')
+    numberService.getAll()
       .then(response => {
         this.setState({ persons: response.data })
       })
@@ -30,9 +30,12 @@ class App extends React.Component {
       return;
     }
 
-    const new_persons = this.state.persons
-    new_persons.push({ name: this.state.newName, number: this.state.newNumber })
-    this.setState({ persons: new_persons })
+    const newPersons = this.state.persons
+    const newPerson = { name: this.state.newName, number: this.state.newNumber }
+    newPersons.push(newPerson)
+    this.setState({ persons: newPersons })
+    
+    numberService.create(newPerson)
   }
 
   nameInList = (name) => this.state.persons.map(person => person.name === name).includes(true)
