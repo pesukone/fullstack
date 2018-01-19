@@ -3,7 +3,10 @@ import React from 'react';
 import Numbers from './components/Numbers'
 import Input from './components/Input'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 import numberService from './services/numbers'
+
+import './App.css'
 
 class App extends React.Component {
   constructor(props) {
@@ -12,14 +15,15 @@ class App extends React.Component {
       persons: [],
       newName: '',
       newNumber: '',
-      filter: ''
+      filter: '',
+      notification: null
     }
   }
 
   componentWillMount() {
     numberService.getAll()
-      .then(response => {
-        this.setState({ persons: response.data })
+      .then(persons => {
+        this.setState({ persons: persons })
       })
   }
 
@@ -32,17 +36,31 @@ class App extends React.Component {
       if (window.confirm(`${person.name} on jo luettelossa, korvataanko vanha numero uudella?`)) {
         const newPerson = Object.assign(person, { number: this.state.newNumber })
         numberService.update(newPerson.id, newPerson)
-          .then((res) => {
-            const persons = this.state.persons.filter(p => p.id !== newPerson.id).concat(newPerson)
-            this.setState({ persons: persons })
+          .catch(error => {
+            numberService.create(newPerson)
           })
+
+        const persons = this.state.persons.filter(p => p.id !== newPerson.id).concat(newPerson)
+        this.setState({
+          persons: persons,
+          notification: "numero päivitetty"
+        })
+        setTimeout(() => {
+          this.setState({ notification: null })
+        }, 3000)
       }
     } else {
       numberService.create({ name: this.state.newName, number: this.state.newNumber })
-        .then((res) => {
+        .then((created) => {
           const persons = this.state.persons
-          persons.push(res.data)
-          this.setState({ persons: persons })
+          persons.push(created)
+          this.setState({
+            persons: persons,
+            notification: `lisättiin ${created.name}`
+          })
+          setTimeout(() => {
+            this.setState({ notification: null })
+          }, 3000)
         })
     }
   }
@@ -54,7 +72,13 @@ class App extends React.Component {
       const newPersons = this.state.persons
       newPersons.splice(newPersons.indexOf(person), 1)
 
-      this.setState({ persons: newPersons })
+      this.setState({
+        persons: newPersons,
+        notification: `poistettiin ${person.name}`
+      })
+      setTimeout(() => {
+        this.setState({ notification: null })
+      }, 3000)
     }
   }
 
@@ -72,6 +96,7 @@ class App extends React.Component {
     return (
       <div>
         <h2>Puhelinluettelo</h2>
+        <Notification message={this.state.notification} />
         <Filter filter={this.state.filter} change={this.handleChange("filter")} />
         <Input state={this.state} addPerson={this.addPerson} change={this.handleChange} />
         <Numbers persons={this.filterNames()} del={this.deletePerson} />
