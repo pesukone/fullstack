@@ -7,4 +7,6 @@ const create = (newPerson) => axios.post(baseUrl, newPerson)
 
 const del = (person) => axios.delete(`${baseUrl}/${person.id}`)
 
-export default { getAll, create, del }
+const update = (id, person) => axios.put(`${baseUrl}/${id}`, person)
+
+export default { getAll, create, del, update }

@@ -26,16 +26,25 @@ class App extends React.Component {
   addPerson = (event) => {
     event.preventDefault()
 
-    if (this.nameInList(this.state.newName)) {
-      return;
-    }
+    const person = this.findByName(this.state.newName)
 
-    numberService.create({ name: this.state.newName, number: this.state.newNumber })
-      .then((res) => {
-        const persons = this.state.persons
-        persons.push(res.data)
-        this.setState({ persons: persons })
-      })
+    if (person) {
+      if (window.confirm(`${person.name} on jo luettelossa, korvataanko vanha numero uudella?`)) {
+        const newPerson = Object.assign(person, { number: this.state.newNumber })
+        numberService.update(newPerson.id, newPerson)
+          .then((res) => {
+            const persons = this.state.persons.filter(p => p.id !== newPerson.id).concat(newPerson)
+            this.setState({ persons: persons })
+          })
+      }
+    } else {
+      numberService.create({ name: this.state.newName, number: this.state.newNumber })
+        .then((res) => {
+          const persons = this.state.persons
+          persons.push(res.data)
+          this.setState({ persons: persons })
+        })
+    }
   }
 
   deletePerson = (person) => () => {
@@ -49,7 +58,9 @@ class App extends React.Component {
     }
   }
 
-  nameInList = (name) => this.state.persons.map(person => person.name === name).includes(true)
+  //nameInList = (name) => this.state.persons.map(person => person.name === name).includes(true)
+
+  findByName = (name) => this.state.persons.filter(person => person.name.toLowerCase() === name.toLowerCase())[0]
 
   handleChange = (field) => (event) => {
     this.setState({ [field]: event.target.value })

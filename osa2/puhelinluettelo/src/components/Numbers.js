@@ -6,7 +6,7 @@ const Numbers = ({ persons, del }) => {
       <h2>Numerot</h2>
       <table>
         <tbody>
-          {persons.map(person => <Phone person={person} del={del} key={person.name} />)}
+          {persons.map(person => <Phone person={person} del={del} key={person.id} />)}
         </tbody>
       </table>
     </div>
