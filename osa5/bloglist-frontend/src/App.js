@@ -2,6 +2,7 @@ import React from 'react'
 
 import LoginForm from './components/Login'
 import BlogList from './components/BlogList'
+import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
 import login from './services/login'
 
@@ -12,6 +13,9 @@ class App extends React.Component {
       blogs: [],
       username: '',
       password: '',
+      title: '',
+      author: '',
+      url: '',
       user: null
     }
   }
@@ -53,7 +57,19 @@ class App extends React.Component {
     this.setState({ user: null })
   }
 
-  handleLoginFieldChange = (e) => {
+  createBlog = async (e) => {
+    e.preventDefault()
+    const newBlog = {
+      title: this.state.title,
+      author: this.state.author,
+      url: this.state.url
+    }
+
+    const createdBlog = await blogService.create(newBlog)
+    this.setState({ blogs: this.state.blogs.concat(createdBlog) })
+  }
+
+  handleFieldChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
   }
 
@@ -64,13 +80,22 @@ class App extends React.Component {
           login={this.login}
           userField={this.state.username}
           passwordField={this.state.password}
-          handler={this.handleLoginFieldChange}
+          handler={this.handleFieldChange}
         /> :
-        <BlogList
-          user={this.state.user}
-          blogs={this.state.blogs}
-          logout={this.logout}
-        />
+        <div>
+          <BlogForm
+            title={this.state.title}
+            author={this.state.author}
+            url={this.state.url}
+            handler={this.handleFieldChange}
+            create={this.createBlog}
+          />
+          <BlogList
+            user={this.state.user}
+            blogs={this.state.blogs}
+            logout={this.logout}
+          />
+        </div>
     )
   }
 }
