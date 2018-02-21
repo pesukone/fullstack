@@ -5,6 +5,7 @@ import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Error from './components/Error'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import login from './services/login'
 
@@ -102,13 +103,19 @@ class App extends React.Component {
             handler={this.handleFieldChange}
           /> :
           <div>
-            <BlogForm
-              title={this.state.title}
-              author={this.state.author}
-              url={this.state.url}
-              handler={this.handleFieldChange}
-              create={this.createBlog}
-            />
+            <p>
+              {this.state.user.name} logged in
+              <button onClick={this.logout}>logout</button>
+            </p>
+            <Togglable buttonLabel="new blog">
+              <BlogForm
+                title={this.state.title}
+                author={this.state.author}
+                url={this.state.url}
+                handler={this.handleFieldChange}
+                create={this.createBlog}
+              />
+            </Togglable>
             <BlogList
               user={this.state.user}
               blogs={this.state.blogs}
