@@ -3,6 +3,8 @@ import React from 'react'
 import LoginForm from './components/Login'
 import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
+import Notification from './components/Notification'
+import Error from './components/Error'
 import blogService from './services/blogs'
 import login from './services/login'
 
@@ -16,7 +18,9 @@ class App extends React.Component {
       title: '',
       author: '',
       url: '',
-      user: null
+      user: null,
+      error: null,
+      notification: null
     }
   }
 
@@ -44,10 +48,7 @@ class App extends React.Component {
       window.localStorage.setItem('loggedAppUser', JSON.stringify(user))
       this.setState({ username: '', password: '', user })
     } catch (exception) {
-      this.setState({ error: 'invalid username or password' })
-      setTimeout(() => {
-        this.setState({ error: null })
-      }, 5000)
+      this.showError('invalid username or password')
     }
   }
 
@@ -55,6 +56,20 @@ class App extends React.Component {
     window.localStorage.removeItem('loggedAppUser')
     blogService.setToken(null)
     this.setState({ user: null })
+  }
+
+  showNotification = (text) => {
+    this.setState({ notification: text })
+    setTimeout(() => {
+      this.setState({ notification: null })
+    }, 5000)
+  }
+
+  showError = (text) => {
+    this.setState({ error: text })
+    setTimeout(() => {
+      this.setState({ error: null })
+    }, 5000)
   }
 
   createBlog = async (e) => {
@@ -67,6 +82,7 @@ class App extends React.Component {
 
     const createdBlog = await blogService.create(newBlog)
     this.setState({ blogs: this.state.blogs.concat(createdBlog) })
+    this.showNotification(`a new blog '${createdBlog.title}' by ${createdBlog.author} added`)
   }
 
   handleFieldChange = (e) => {
@@ -75,27 +91,32 @@ class App extends React.Component {
 
   render() {
     return (
-      this.state.user === null ?
-        <LoginForm
-          login={this.login}
-          userField={this.state.username}
-          passwordField={this.state.password}
-          handler={this.handleFieldChange}
-        /> :
-        <div>
-          <BlogForm
-            title={this.state.title}
-            author={this.state.author}
-            url={this.state.url}
+      <div>
+        <Notification message={this.state.notification} />
+        <Error message={this.state.error} />
+        {this.state.user === null ?
+          <LoginForm
+            login={this.login}
+            userField={this.state.username}
+            passwordField={this.state.password}
             handler={this.handleFieldChange}
-            create={this.createBlog}
-          />
-          <BlogList
-            user={this.state.user}
-            blogs={this.state.blogs}
-            logout={this.logout}
-          />
-        </div>
+          /> :
+          <div>
+            <BlogForm
+              title={this.state.title}
+              author={this.state.author}
+              url={this.state.url}
+              handler={this.handleFieldChange}
+              create={this.createBlog}
+            />
+            <BlogList
+              user={this.state.user}
+              blogs={this.state.blogs}
+              logout={this.logout}
+            />
+          </div>
+        }
+      </div>
     )
   }
 }
