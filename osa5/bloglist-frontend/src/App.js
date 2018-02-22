@@ -86,6 +86,20 @@ class App extends React.Component {
     this.showNotification(`a new blog '${createdBlog.title}' by ${createdBlog.author} added`)
   }
 
+  like = (id) => () => {
+    const blog = this.state.blogs.find(b => b.id === id)
+    const changedBlog = { ...blog, likes: blog.likes + 1 }
+
+    blogService
+      .update(id, changedBlog)
+      .then(updatedBlog => {
+        const filtered = this.state.blogs.filter(b => b.id !== id)
+        this.setState({
+          blogs: filtered.concat(updatedBlog)
+        })
+      })
+  }
+
   handleFieldChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
   }
@@ -120,6 +134,7 @@ class App extends React.Component {
               user={this.state.user}
               blogs={this.state.blogs}
               logout={this.logout}
+              like={this.like}
             />
           </div>
         }

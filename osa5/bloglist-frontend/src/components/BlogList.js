@@ -1,10 +1,10 @@
 import React from 'react'
 
-const BlogList = ({ blogs }) => (
+const BlogList = ({ blogs, like }) => (
   <div>
     <h2>Blogs</h2>
 
-    {blogs.map(blog => <Blog key={blog.id} blog={blog} />)}
+    {blogs.map(blog => <Blog key={blog.id} blog={blog} like={like}/>)}
   </div>
 )
 
@@ -12,8 +12,7 @@ class Blog extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      visible: false,
-      blog: props.blog
+      visible: false
     }
   }
 
@@ -22,7 +21,6 @@ class Blog extends React.Component {
   }
 
   render() {
-    //const hideWhenVisible = { display: this.state.visible ? 'none' : '' }
     const showWhenVisible = { display: this.state.visible ? '' : 'none' }
 
     const blogStyle = {
@@ -36,22 +34,16 @@ class Blog extends React.Component {
     return (
       <div style={blogStyle}>
         <div onClick={this.toggleVisibility}>
-          {this.state.blog.title} {this.state.blog.author}
+          {this.props.blog.title} {this.props.blog.author}
         </div>
         <div style={showWhenVisible}>
-          <p><a href={this.state.blog.url}>{this.state.blog.url}</a></p>
-          <p>{this.state.blog.likes} likes <button>like</button></p>
-          <p>added by {this.state.blog.user.name}</p>
+          <p><a href={this.props.blog.url}>{this.props.blog.url}</a></p>
+          <p>{this.props.blog.likes} likes <button onClick={this.props.like(this.props.blog.id)}>like</button></p>
+          <p>added by {this.props.blog.user.name}</p>
         </div>
       </div>
     )
   }
 }
-
-  /*const Blog = ({blog}) => (
-  <div>
-    {blog.title} {blog.author}
-  </div>  
-)*/
 
 export default BlogList
