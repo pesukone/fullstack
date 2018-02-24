@@ -46,6 +46,7 @@ class App extends React.Component {
         password: this.state.password
       })
 
+      blogService.setToken(user.token)
       window.localStorage.setItem('loggedAppUser', JSON.stringify(user))
       this.setState({ username: '', password: '', user })
     } catch (exception) {
@@ -100,6 +101,22 @@ class App extends React.Component {
       })
   }
 
+  remove = (id) => () => {
+    const blog = this.state.blogs.find(b => b.id === id)
+
+    if (window.confirm(`delete ${blog.title} by ${blog.author}?`)) {
+      blogService
+        .remove(id)
+        .then(res => {
+          if (!res.message) {
+            this.setState({ blogs: this.state.blogs.filter(b => b.id !== id) })
+          } else {
+            this.showError('delete failed')
+          }
+        })
+    }
+  }
+
   handleFieldChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
   }
@@ -135,6 +152,7 @@ class App extends React.Component {
               blogs={this.state.blogs}
               logout={this.logout}
               like={this.like}
+              remove={this.remove}
             />
           </div>
         }

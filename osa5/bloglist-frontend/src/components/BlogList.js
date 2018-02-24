@@ -1,11 +1,20 @@
 import React from 'react'
 
-const BlogList = ({ blogs, like }) => (
+const BlogList = ({ user, blogs, like, remove }) => (
   <div>
     <h2>Blogs</h2>
 
     {blogs
-        .sort((a, b) => b.likes - a.likes).map(blog => <Blog key={blog.id} blog={blog} like={like}/>)}
+        .sort((a, b) => b.likes - a.likes)
+        .map(blog => 
+          <Blog
+            key={blog.id}
+            blog={blog}
+            like={like}
+            delete={remove}
+            user={user}
+          />)
+    }
   </div>
 )
 
@@ -41,6 +50,9 @@ class Blog extends React.Component {
           <p><a href={this.props.blog.url}>{this.props.blog.url}</a></p>
           <p>{this.props.blog.likes} likes <button onClick={this.props.like(this.props.blog.id)}>like</button></p>
           <p>added by {this.props.blog.user.name}</p>
+          {this.props.user.id === this.props.blog.user._id &&
+              <p><button onClick={this.props.delete(this.props.blog.id)}>delete</button></p>
+          }
         </div>
       </div>
     )
