@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const BlogList = ({ user, blogs, like, remove }) => (
   <div>
@@ -17,6 +18,13 @@ const BlogList = ({ user, blogs, like, remove }) => (
     }
   </div>
 )
+
+BlogList.propTypes = {
+  user: PropTypes.object.isRequired,
+  blogs: PropTypes.array.isRequired,
+  like: PropTypes.func.isRequired,
+  remove: PropTypes.func.isRequired
+}
 
 class Blog extends React.Component {
   constructor(props) {
