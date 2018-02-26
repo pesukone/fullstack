@@ -11,9 +11,9 @@ describe('<SimpleBlog />', () => {
     likes: 3
   }
 
-  beforeEach(() => {
-    const mockHandler = jest.fn()
+  const mockHandler = jest.fn()
 
+  beforeEach(() => {
     blogComponent = shallow(
       <SimpleBlog
         blog={blog}
@@ -29,5 +29,14 @@ describe('<SimpleBlog />', () => {
     expect(infoDiv.text()).toContain(blog.title)
     expect(infoDiv.text()).toContain(blog.author)
     expect(likeDiv.text()).toContain(blog.likes)
+  })
+
+  it('increments likes correctly', () => {
+    const button = blogComponent.find('button')
+
+    button.at(0).simulate('click')
+    button.at(0).simulate('click')
+
+    expect(mockHandler.mock.calls.length).toBe(2)
   })
 })
