@@ -25,7 +25,7 @@ class App extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentWillMount() {
     blogService.getAll().then(blogs =>
       this.setState({ blogs })
     )
@@ -33,8 +33,8 @@ class App extends React.Component {
     const loggedUserJSON = window.localStorage.getItem('loggedAppUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      this.setState({ user })
       blogService.setToken(user.token)
+      this.setState({ user })
     }
   } 
 
