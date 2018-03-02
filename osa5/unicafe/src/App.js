@@ -1,12 +1,17 @@
 import React from 'react'
 
-const Statistiikka = () => {
-  const palautteita = 0
+const klik = (reducer, nappi) => () => {
+  return reducer.dispatch({ type: nappi })
+}
 
-  if (palautteita === 0) {
+const Statistiikka = ({ reducer }) => {
+  let good, ok, bad
+  ({ good, ok, bad } = reducer.getState())
+
+  if (!good && !ok && !bad) {
     return (
       <div>
-        <h2>stataistiikka</h2>
+        <h2>statistiikka</h2>
         <div>ei yhtään palautetta annettu</div>
       </div>
     )
@@ -19,48 +24,41 @@ const Statistiikka = () => {
         <tbody>
           <tr>
             <td>hyvä</td>
-            <td></td>
+            <td>{good}</td>
           </tr>
           <tr>
             <td>neutraali</td>
-            <td></td>
+            <td>{ok}</td>
           </tr>
           <tr>
             <td>huono</td>
-            <td></td>
+            <td>{bad}</td>
           </tr>
           <tr>
             <td>keskiarvo</td>
-            <td></td>
+            <td>{((good - bad) / (good + ok + bad)).toFixed(2)}</td>
           </tr>
           <tr>
             <td>positiivisia</td>
-            <td></td>
+            <td>{(good / (good + ok + bad) * 100).toFixed(0)} %</td>
           </tr>
         </tbody>
       </table>
-
-      <button>nollaa tilasto</button>
+      <button onClick={klik(reducer, 'ZERO')}>nollaa tilasto</button>
     </div >
   )
 }
 
-class App extends React.Component {
-  klik = (nappi) => () => {
-    
-  }
-
-  render() {
-    return (
-      <div>
-        <h2>anna palautetta</h2>
-        <button onClick={this.klik('GOOD')}>hyvä</button>
-        <button onClick={this.klik('OK')}>neutraali</button>
-        <button onClick={this.klik('BAD')}>huono</button>
-        <Statistiikka />
-      </div>
-    )
-  }
-}
+const App = ({ reducer }) => (
+  <div>
+    <h2>anna palautetta</h2>
+    <button onClick={klik(reducer, 'GOOD')}>hyvä</button>
+    <button onClick={klik(reducer, 'OK')}>neutraali</button>
+    <button onClick={klik(reducer, 'BAD')}>huono</button>
+    <Statistiikka
+      reducer={reducer}
+    />
+  </div>
+)
 
 export default App;
