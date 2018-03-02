@@ -20,9 +20,6 @@ const asObject = (anecdote) => {
 const initialState = anecdotesAtStart.map(asObject)
 
 const reducer = (state = initialState, action) => {
-  console.log('state now: ',state)
-  console.log('action', action)
-
   switch(action.type) {
     case 'VOTE':
       const id = action.data.id
@@ -32,6 +29,8 @@ const reducer = (state = initialState, action) => {
       return found ?
         [...notUpdated, { ...found, votes: found.votes + 1 }] :
         state
+    case 'CREATE':
+      return [...state, asObject(action.data.anecdote)]
     default:
       return state
   }

@@ -1,8 +1,14 @@
 const actionFor = {
-  vote(id) {
+  voting(id) {
     return {
       type: 'VOTE',
       data: { id }
+    }
+  },
+  anecdoteCreation(anecdote) {
+    return {
+      type: 'CREATE',
+      data: { anecdote }
     }
   }
 }

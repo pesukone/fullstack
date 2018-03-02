@@ -4,8 +4,16 @@ import actionFor from './actionCreators'
 class App extends React.Component {
   vote = (id) => () => {
     this.props.store.dispatch(
-      actionFor.vote(id)
+      actionFor.voting(id)
     )
+  }
+
+  addAnecdote = (e) => {
+    e.preventDefault()
+    this.props.store.dispatch(
+      actionFor.anecdoteCreation(e.target.anecdote.value)
+    )
+    e.target.anecdote.value = ''
   }
 
   render() {
@@ -25,9 +33,9 @@ class App extends React.Component {
           </div>
         )}
         <h2>create new</h2>
-        <form>
-          <div><input /></div>
-          <button>create</button> 
+        <form onSubmit={this.addAnecdote}>
+          <div><input name="anecdote" /></div>
+          <button type="submit">create</button> 
         </form>
       </div>
     )
