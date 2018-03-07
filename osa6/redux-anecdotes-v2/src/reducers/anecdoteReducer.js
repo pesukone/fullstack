@@ -24,7 +24,7 @@ const reducer = (store = initialState, action) => {
     const old = store.filter(a => a.id !==action.id)
     const voted = store.find(a => a.id === action.id)
 
-    return [...old, { ...voted, votes: voted.votes+1} ]
+    return [...old, { ...voted, votes: voted.votes + 1 } ]
   }
   if (action.type === 'CREATE') {
 
@@ -33,5 +33,15 @@ const reducer = (store = initialState, action) => {
 
   return store
 }
+
+export const voting = (id) => ({
+  type: 'VOTE',
+  id: id
+})
+
+export const creating = (content) => ({
+  type: 'CREATE',
+  content
+})
 
 export default reducer
