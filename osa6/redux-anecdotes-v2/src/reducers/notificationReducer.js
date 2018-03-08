@@ -1,4 +1,4 @@
-const initialState = 'kukkuu'
+const initialState = ''
 
 const notificationReducer = (store = initialState, action) => {
   switch (action.type) {

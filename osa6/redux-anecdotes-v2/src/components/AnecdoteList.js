@@ -5,7 +5,17 @@ import { notify } from '../reducers/notificationReducer'
 
 class AnecdoteList extends React.Component {
   render() {
-    const anecdotes = this.props.store.getState().anecdotes
+    const state = this.props.store.getState()
+
+    const filterFunction = anecdote =>
+      anecdote.content
+        .toLowerCase()
+        .includes(state.filter)
+
+    const anecdotes = state
+      .anecdotes
+      .filter(filterFunction)
+
     return (
       <div>
         <h2>Anecdotes</h2>
