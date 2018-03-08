@@ -2,15 +2,19 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { creating } from '../reducers/anecdoteReducer'
 import { notify } from '../reducers/notificationReducer'
+import anecdoteService from '../services/anecdotes'
 
 const AnecdoteForm = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault()
-    const content = e.target.anecdote.value
-    props.creating(content)
 
-    props.notify(`created '${content}'`)
-    setTimeout(() => props.notify(''), 5000)
+    anecdoteService
+      .createNew(e.target.anecdote.value)
+      .then(created => {
+        props.creating(created)
+        props.notify(`created '${created.content}'`)
+        setTimeout(() => props.notify(''), 5000)
+      })
 
     e.target.anecdote.value = ''
   }
