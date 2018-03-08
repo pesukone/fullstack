@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import { voting } from '../reducers/anecdoteReducer'
 import { notify } from '../reducers/notificationReducer'
+import anecdoteService from '../services/anecdotes'
 
 const AnecdoteList = (props) =>
   <div>
@@ -16,6 +17,11 @@ const AnecdoteList = (props) =>
           <div>
             has {anecdote.votes}
             <button onClick={() => {
+              anecdoteService
+                .update(anecdote.id, {
+                  ...anecdote,
+                  votes: anecdote.votes + 1
+                })
               props.voting(anecdote.id)
               props.notify(`you voted '${anecdote.content}'`)
               setTimeout(() => props.notify(''), 5000)
