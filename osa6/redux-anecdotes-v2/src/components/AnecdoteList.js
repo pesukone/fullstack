@@ -1,44 +1,49 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 import { voting } from '../reducers/anecdoteReducer'
 import { notify } from '../reducers/notificationReducer'
 
-class AnecdoteList extends React.Component {
-  render() {
-    const state = this.props.store.getState()
+const AnecdoteList = (props) =>
+  <div>
+    <h2>Anecdotes</h2>
+    {props.anecdotesToShow
+      .map(anecdote =>
+        <div key={anecdote.id}>
+          <div>
+            {anecdote.content}
+          </div>
+          <div>
+            has {anecdote.votes}
+            <button onClick={() => {
+              props.voting(anecdote.id)
+              props.notify(`you voted '${anecdote.content}'`)
+              setTimeout(() => props.notify(''), 5000)
+            }}>
+              vote
+            </button>
+          </div>
+        </div>
+      )}
+  </div>
 
-    const filterFunction = anecdote =>
-      anecdote.content
+const mapStateToProps = (state) => {
+  const anecdotes = state
+    .anecdotes
+    .filter(anecdote =>
+      anecdote
+        .content
         .toLowerCase()
         .includes(state.filter)
-
-    const anecdotes = state
-      .anecdotes
-      .filter(filterFunction)
-
-    return (
-      <div>
-        <h2>Anecdotes</h2>
-        {anecdotes.sort((a, b) => b.votes - a.votes).map(anecdote =>
-          <div key={anecdote.id}>
-            <div>
-              {anecdote.content}
-            </div>
-            <div>
-              has {anecdote.votes}
-              <button onClick={() => {
-                this.props.store.dispatch(voting(anecdote.id))
-                this.props.store.dispatch(notify(`you voted '${anecdote.content}'`))
-                setTimeout(() => this.props.store.dispatch(notify('')), 5000)
-              }}>
-                vote
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
     )
+    .sort((a, b) => b.votes - a.votes)
+
+  return {
+    anecdotesToShow: anecdotes
   }
 }
 
-export default AnecdoteList
+export default connect(
+  mapStateToProps,
+  { voting, notify }
+)(AnecdoteList)
