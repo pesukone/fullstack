@@ -1,15 +1,17 @@
 import React from 'react'
 
 const Notification = ({ store }) => {
+  const notification = store.getState().notification
   const style = {
     border: 'solid',
     padding: 10,
     borderWidth: 1
   }
   return (
-    <div style={style}>
-      {store.getState().notification}
-    </div>
+    notification &&
+      <div style={style}>
+        {store.getState().notification}
+      </div>
   )
 }
 
