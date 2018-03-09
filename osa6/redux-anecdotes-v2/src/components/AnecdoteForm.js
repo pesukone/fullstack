@@ -8,8 +8,7 @@ const AnecdoteForm = (props) => {
     e.preventDefault()
 
     props.createNew(e.target.anecdote.value)
-    props.notify(`created '${e.target.anecdote.value}'`)
-    setTimeout(() => props.notify(''), 5000)
+    props.notify(`created '${e.target.anecdote.value}'`, 5)
 
     e.target.anecdote.value = ''
   }

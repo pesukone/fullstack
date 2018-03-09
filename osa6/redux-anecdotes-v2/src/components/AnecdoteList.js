@@ -17,8 +17,7 @@ const AnecdoteList = (props) =>
             has {anecdote.votes}
             <button onClick={() => {
               props.vote(anecdote)
-              props.notify(`you voted '${anecdote.content}'`)
-              setTimeout(() => props.notify(''), 5000)
+              props.notify(`you voted '${anecdote.content}'`, 5)
             }}>
               vote
             </button>
