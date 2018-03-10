@@ -3,6 +3,7 @@ import {
   BrowserRouter as Router,
   Route, Link
 } from 'react-router-dom'
+import { Container, Table } from 'semantic-ui-react'
 
 const Menu = () => (
   <div>    
@@ -15,13 +16,17 @@ const Menu = () => (
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
-    <ul>
+    <Table striped celled>
+      <Table.Body>
       {anecdotes.map(anecdote =>
-        <li key={anecdote.id} >
-          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
-        </li>
+        <Table.Row key={anecdote.id} >
+          <Table.Cell>
+            <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+          </Table.Cell>
+        </Table.Row>
       )}
-    </ul>  
+      </Table.Body>
+    </Table>
   </div>
 )
 
@@ -182,7 +187,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <Container>
         <Router>
           <div>
             <h1>Software anecdotes</h1>
@@ -198,7 +203,7 @@ class App extends React.Component {
             <Footer />
           </div>
         </Router>
-      </div>
+      </Container>
     )
   }
 }
