@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 import LoginForm from './components/Login'
 import BlogList from './components/BlogList'
@@ -6,8 +7,11 @@ import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Error from './components/Error'
 import Togglable from './components/Togglable'
+
 import blogService from './services/blogs'
 import login from './services/login'
+
+import { notify } from './reducers/notificationReducer'
 
 class App extends React.Component {
   constructor(props) {
@@ -20,8 +24,7 @@ class App extends React.Component {
       author: '',
       url: '',
       user: null,
-      error: null,
-      notification: null
+      error: null
     }
   }
 
@@ -60,11 +63,8 @@ class App extends React.Component {
     this.setState({ user: null })
   }
 
-  showNotification = (text) => {
-    this.setState({ notification: text })
-    setTimeout(() => {
-      this.setState({ notification: null })
-    }, 5000)
+  showNotification = async (text) => {
+    this.props.notify(text, 5)
   }
 
   showError = (text) => {
@@ -124,7 +124,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Notification message={this.state.notification} />
+        <Notification />
         <Error message={this.state.error} />
         {this.state.user === null ?
           <LoginForm
@@ -161,4 +161,7 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default connect(
+  null,
+  { notify }
+)(App)

@@ -10,7 +10,8 @@ module.exports = {
   "rules": {
     "indent": [
       "error",
-      2
+      2,
+      { "SwitchCase": 1 }
     ],
     "linebreak-style": [
       "error",
@@ -35,7 +36,8 @@ module.exports = {
     "no-console": 0,
     "comma-dangle": [
       "error", "never"
-    ]
+    ],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
   },
   "globals": {
     "test": true,
