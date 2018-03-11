@@ -14,17 +14,21 @@ class LoginForm extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this.setState({ username: '', password: '' })
+  }
+
   login = async (e) => {
     e.preventDefault()
     try {
-      await this.props.authenticateWith({
+      const user = await this.props.authenticateWith({
         username: this.state.username,
         password: this.state.password
       })
-      blogService.setToken(this.props.user.token)
-      window.localStorage.setItem('loggedAppUser', JSON.stringify(this.props.user))
-      this.setState({ username: '', password: '' })
+      blogService.setToken(user.token)
+      window.localStorage.setItem('loggedAppUser', JSON.stringify(user))
     } catch (exception) {
+      console.log(exception)
       this.props.error('invalid username or password', 5)
     }
   }

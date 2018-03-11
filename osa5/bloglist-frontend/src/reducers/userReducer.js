@@ -25,6 +25,7 @@ export const authenticateWith = credentials => async (dispatch) => {
     type: 'LOGIN',
     user
   })
+  return user
 }
 
 export const logout = () =>
