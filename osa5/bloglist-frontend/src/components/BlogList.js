@@ -1,31 +1,31 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
 import Blog from './Blog'
 
-const BlogList = ({ user, blogs, like, remove }) => (
+import { error } from '../reducers/notificationReducer'
+
+const BlogList = props => (
   <div>
     <h2>Blogs</h2>
 
-    {blogs
+    {props.blogs
       .sort((a, b) => b.likes - a.likes)
       .map(blog => (
         <Blog
           key={blog.id}
           blog={blog}
-          like={like}
-          delete={remove}
-          user={user}
         />))
     }
   </div>
 )
 
-BlogList.propTypes = {
-  user: PropTypes.object.isRequired,
-  blogs: PropTypes.array.isRequired,
-  like: PropTypes.func.isRequired,
-  remove: PropTypes.func.isRequired
-}
+const mapStateToProps = state => ({
+  blogs: state.blogs,
+  user: state.user
+})
 
-export default BlogList
+export default connect(
+  mapStateToProps,
+  { error }
+)(BlogList)
