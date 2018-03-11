@@ -1,35 +1,22 @@
-import login from '../services/login'
+import userService from '../services/users'
 
-const initialState = null
+const initialState = []
 
 const userReducer = (store = initialState, action) => {
   switch (action.type) {
-    case 'LOGIN':
-      return action.user
-    case 'LOGOUT':
-      return null
+    case 'INIT_USERS':
+      return action.users
     default:
       return store
   }
 }
 
-export const loginAs = user => dispatch =>
+export const initUsers = () => async (dispatch) => {
+  const users = await userService.getAll()
   dispatch({
-    type: 'LOGIN',
-    user
+    type: 'INIT_USERS',
+    users
   })
-
-export const authenticateWith = credentials => async (dispatch) => {
-  const user = await login(credentials)
-  dispatch({
-    type: 'LOGIN',
-    user
-  })
-  return user
 }
-
-export const logout = () =>
-  dispatch => dispatch({ type: 'LOGOUT' })
-
 
 export default userReducer

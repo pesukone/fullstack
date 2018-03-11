@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import blogService from '../services/blogs'
-import { authenticateWith } from '../reducers/userReducer'
+import { authenticateWith } from '../reducers/loginReducer'
 import { error } from '../reducers/notificationReducer'
 
 class LoginForm extends React.Component {
