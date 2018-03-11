@@ -9,22 +9,18 @@ import Error from './components/Error'
 import Togglable from './components/Togglable'
 
 import blogService from './services/blogs'
-import login from './services/login'
 
-import { notify } from './reducers/notificationReducer'
+import { notify, error } from './reducers/notificationReducer'
+import { authenticateWith, loginAs, logout } from './reducers/userReducer'
 
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       blogs: [],
-      username: '',
-      password: '',
       title: '',
       author: '',
-      url: '',
-      user: null,
-      error: null
+      url: ''
     }
   }
 
@@ -37,41 +33,22 @@ class App extends React.Component {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       blogService.setToken(user.token)
-      this.setState({ user })
+      this.props.loginAs(user)
     }
   } 
-
-  login = async (e) => {
-    e.preventDefault()
-    try {
-      const user = await login({
-        username: this.state.username,
-        password: this.state.password
-      })
-
-      blogService.setToken(user.token)
-      window.localStorage.setItem('loggedAppUser', JSON.stringify(user))
-      this.setState({ username: '', password: '', user })
-    } catch (exception) {
-      this.showError('invalid username or password')
-    }
-  }
 
   logout = async (e) => {
     window.localStorage.removeItem('loggedAppUser')
     blogService.setToken(null)
-    this.setState({ user: null })
+    this.props.logout()
   }
 
   showNotification = async (text) => {
     this.props.notify(text, 5)
   }
 
-  showError = (text) => {
-    this.setState({ error: text })
-    setTimeout(() => {
-      this.setState({ error: null })
-    }, 5000)
+  showError = async (text) => {
+    this.props.error(text, 5)
   }
 
   createBlog = async (e) => {
@@ -125,17 +102,13 @@ class App extends React.Component {
     return (
       <div>
         <Notification />
-        <Error message={this.state.error} />
-        {this.state.user === null ?
+        <Error />
+        {this.props.user === null ?
           <LoginForm
-            login={this.login}
-            userField={this.state.username}
-            passwordField={this.state.password}
-            handler={this.handleFieldChange}
           /> :
           <div>
             <p>
-              {this.state.user.name} logged in
+              {this.props.user.name} logged in
               <button onClick={this.logout}>logout</button>
             </p>
             <Togglable buttonLabel="new blog">
@@ -148,7 +121,7 @@ class App extends React.Component {
               />
             </Togglable>
             <BlogList
-              user={this.state.user}
+              user={this.props.user}
               blogs={this.state.blogs}
               logout={this.logout}
               like={this.like}
@@ -161,7 +134,11 @@ class App extends React.Component {
   }
 }
 
+const mapStateToProps = state => ({
+  user: state.user
+})
+
 export default connect(
-  null,
-  { notify }
+  mapStateToProps,
+  { notify, error, authenticateWith, loginAs, logout }
 )(App)

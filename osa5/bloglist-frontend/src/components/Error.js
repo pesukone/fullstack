@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 const Error = ({ message }) => (
   message === null ?
@@ -8,4 +9,8 @@ const Error = ({ message }) => (
     </div>
 )
 
-export default Error
+const mapStateToProps = state => ({
+  message: state.notification.error
+})
+
+export default connect(mapStateToProps)(Error)

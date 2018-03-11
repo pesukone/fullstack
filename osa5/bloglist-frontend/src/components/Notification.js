@@ -10,7 +10,7 @@ const Notification = ({ notification }) => (
 )
 
 const mapStateToProps = state => ({
-  notification: state
+  notification: state.notification.notification
 })
 
 export default connect(mapStateToProps)(Notification)

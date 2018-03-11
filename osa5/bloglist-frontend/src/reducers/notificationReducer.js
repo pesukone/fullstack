@@ -1,28 +1,32 @@
-const initialState = ''
+const initialState = { notification: '', error: '' }
 
 const notificationReducer = (store = initialState, action) => {
-  console.log(action)
   switch (action.type) {
     case 'NOTIFICATION':
-      return action.text
+      return { ...store, notification: action.text }
+    case 'ERROR':
+      return { ...store, error: action.text }
     default:
       return store
   }
 }
 
-export const notify = (text, time) => {
-  return async (dispatch) => {
+const show = type => (text, time) =>
+  async (dispatch) => {
     dispatch({
-      type: 'NOTIFICATION',
+      type,
       text
     })
     setTimeout(() => {
       dispatch({
-        type: 'NOTIFICATION',
+        type,
         text: ''
       })
     }, time * 1000)
   }
-}
+
+export const error = show('ERROR')
+
+export const notify = show('NOTIFICATION')
 
 export default notificationReducer
